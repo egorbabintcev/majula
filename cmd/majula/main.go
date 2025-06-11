@@ -12,7 +12,7 @@ func main() {
 	port := os.Getenv("MAJULA_REGISTRY_PORT")
 
 	if port == "" {
-		port = "8080"
+		port = "8000"
 	}
 
 	addr := ":" + port
