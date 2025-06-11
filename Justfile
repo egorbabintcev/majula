@@ -1,6 +1,6 @@
 run:
     docker build -t majula . && \
-    docker rm majula_backend
+    docker rm majula_backend || true
     docker run \
         --name majula_backend \
         -p 8000:8000 \
