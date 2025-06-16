@@ -1,0 +1,18 @@
+package iface_http
+
+import (
+	"encoding/json"
+	"net/http"
+)
+
+func respondWErr(w http.ResponseWriter, s int, m string) {
+	w.Header().Set("Content-Type", "application/json")
+
+	res, _ := json.Marshal(ErrResBody{
+		Code:    s,
+		Message: m,
+	})
+
+	w.Write(res)
+	w.WriteHeader(s)
+}
