@@ -13,6 +13,6 @@ func respondWErr(w http.ResponseWriter, s int, m string) {
 		Message: m,
 	})
 
-	w.Write(res)
 	w.WriteHeader(s)
+	w.Write(res)
 }
