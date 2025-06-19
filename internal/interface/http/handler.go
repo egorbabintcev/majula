@@ -1,6 +1,7 @@
 package iface_http
 
 import (
+	"log/slog"
 	"majula/internal/core"
 	"net/http"
 
@@ -17,9 +18,12 @@ func newHandler(s *core.Service) *handler {
 	}
 }
 
-func NewRouter(s *core.Service) http.Handler {
+func NewRouter(s *core.Service, l *slog.Logger) http.Handler {
 	r := chi.NewRouter()
 	h := newHandler(s)
+
+	r.Use(logger(l))
+	r.Use(recoverer(l))
 
 	_ = h
 

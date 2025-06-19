@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log/slog"
 	"majula/internal/core"
 	"majula/internal/infrastructure"
 	iface_http "majula/internal/interface/http"
@@ -17,9 +18,13 @@ func main() {
 
 	addr := ":" + port
 
+	l := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+
 	st := infrastructure.NewMemoryStorage()
 	s := core.NewService(st)
-	r := iface_http.NewRouter(s)
+	r := iface_http.NewRouter(s, l)
 
 	http.ListenAndServe(addr, r)
 }
