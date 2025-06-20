@@ -5,14 +5,14 @@ import (
 	"net/http"
 )
 
-func respondWErr(w http.ResponseWriter, s int, m string) {
+func respondWErr(w http.ResponseWriter, c int) {
 	w.Header().Set("Content-Type", "application/json")
 
 	res, _ := json.Marshal(ErrResBody{
-		Code:    s,
-		Message: m,
+		Code:    c,
+		Message: http.StatusText(c),
 	})
 
-	w.WriteHeader(s)
+	w.WriteHeader(c)
 	w.Write(res)
 }
