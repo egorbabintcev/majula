@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/json"
 	"log/slog"
 	"majula/internal/core"
 	"net/http"
@@ -18,6 +19,17 @@ func newHandler(s *core.Service) *handler {
 	}
 }
 
+func (h *handler) handleGetWhoAmI(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	res, _ := json.Marshal(GetWhoAmIRes{
+		Username: "system",
+	})
+
+	w.WriteHeader(http.StatusOK)
+	w.Write(res)
+}
+
 func NewRouter(s *core.Service, l *slog.Logger) http.Handler {
 	r := chi.NewRouter()
 	h := newHandler(s)
@@ -25,7 +37,7 @@ func NewRouter(s *core.Service, l *slog.Logger) http.Handler {
 	r.Use(logger(l))
 	r.Use(recoverer(l))
 
-	_ = h
+	r.Get("/-/whoami", h.handleGetWhoAmI)
 
 	return r
 }
