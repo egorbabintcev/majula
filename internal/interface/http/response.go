@@ -1,4 +1,4 @@
-package iface_http
+package web
 
 type ErrResBody struct {
 	Code    int    `json:"code"`

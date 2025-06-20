@@ -1,4 +1,4 @@
-package iface_http
+package web
 
 import (
 	"encoding/json"

@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"majula/internal/core"
 	"majula/internal/infrastructure"
-	iface_http "majula/internal/interface/http"
+	web "majula/internal/interface/http"
 	"net/http"
 	"os"
 )
@@ -24,7 +24,7 @@ func main() {
 
 	st := infrastructure.NewMemoryStorage()
 	s := core.NewService(st)
-	r := iface_http.NewRouter(s, l)
+	r := web.NewRouter(s, l)
 
 	http.ListenAndServe(addr, r)
 }
