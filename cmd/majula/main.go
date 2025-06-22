@@ -3,7 +3,7 @@ package main
 import (
 	"log/slog"
 	"majula/internal/core"
-	"majula/internal/infrastructure"
+	"majula/internal/infrastructure/storage/inmem"
 	web "majula/internal/interface/http"
 	"net/http"
 	"os"
@@ -22,8 +22,9 @@ func main() {
 		Level: slog.LevelInfo,
 	}))
 
-	st := infrastructure.NewMemoryStorage()
-	s := core.NewService(st)
+	ps := inmem.NewPackumentStorage()
+	ts := inmem.NewTarballStorage()
+	s := core.NewService(ps, ts)
 	r := web.NewRouter(s, l)
 
 	http.ListenAndServe(addr, r)

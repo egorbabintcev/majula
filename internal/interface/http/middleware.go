@@ -14,7 +14,7 @@ func logger(l *slog.Logger) func(http.Handler) http.Handler {
 			l.Info("HTTP Request",
 				slog.String("url", r.URL.Path),
 				slog.String("method", r.Method),
-				slog.String("remote address", r.RemoteAddr),
+				slog.String("remote_address", r.RemoteAddr),
 			)
 		})
 	}
@@ -28,7 +28,7 @@ func recoverer(l *slog.Logger) func(http.Handler) http.Handler {
 					l.Error("panic caught while handling HTTP Request",
 						slog.String("url", r.URL.Path),
 						slog.String("method", r.Method),
-						slog.String("remote address", r.RemoteAddr),
+						slog.String("remote_address", r.RemoteAddr),
 						slog.Any("error", rec),
 						slog.String("stack", "\n"+string(debug.Stack())),
 					)
