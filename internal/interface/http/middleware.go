@@ -11,7 +11,7 @@ func logger(l *slog.Logger) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			n.ServeHTTP(w, r)
 
-			l.Info("HTTP Request",
+			l.Info("incoming HTTP request",
 				slog.String("url", r.URL.Path),
 				slog.String("method", r.Method),
 				slog.String("remote_address", r.RemoteAddr),
@@ -25,7 +25,7 @@ func recoverer(l *slog.Logger) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if rec := recover(); rec != nil {
-					l.Error("panic caught while handling HTTP Request",
+					l.Error("panic caught",
 						slog.String("url", r.URL.Path),
 						slog.String("method", r.Method),
 						slog.String("remote_address", r.RemoteAddr),

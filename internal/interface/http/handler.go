@@ -5,18 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log/slog"
-	"majula/internal/core"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
 )
 
 type handler struct {
-	service *core.Service
+	service Service
 }
 
-func newHandler(s *core.Service) *handler {
+func newHandler(s Service) *handler {
 	return &handler{
 		service: s,
 	}
@@ -151,20 +149,4 @@ func (h *handler) handleGetTarball(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(http.StatusOK)
 	w.Write(res.Content)
-}
-
-func NewRouter(s *core.Service, l *slog.Logger) http.Handler {
-	r := chi.NewRouter()
-	h := newHandler(s)
-
-	r.Use(logger(l))
-	r.Use(recoverer(l))
-
-	r.Get("/-/whoami", h.handleGetWhoAmI)
-
-	r.Get("/{package}", h.handleGetPkg)
-	r.Put("/{package}", h.handlePutPkg)
-	r.Get("/{package}/-/{tarball}", h.handleGetTarball)
-
-	return r
 }
