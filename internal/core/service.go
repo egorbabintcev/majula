@@ -67,5 +67,9 @@ func (s *Service) PublishPkg(name, version string, tags []string, manifest json.
 		}
 	}
 
+	if _, err := s.tarballStorage.SaveTarball(name+"-"+version+".tgz", tar); err != nil {
+		return err
+	}
+
 	return nil
 }
