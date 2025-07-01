@@ -12,7 +12,7 @@ type PackumentStorage interface {
 }
 
 type TarballStorage interface {
-	SaveTarball(id string, tar []byte) (storage.SaveTarballRes, error)
+	SaveTarball(name, version string, tar []byte) (storage.SaveTarballRes, error)
 	GetTarball(id string) (storage.GetTarballRes, error)
 }
 
@@ -67,7 +67,7 @@ func (s *Service) PublishPkg(name, version string, tags []string, manifest json.
 		}
 	}
 
-	if _, err := s.tarballStorage.SaveTarball(name+"-"+version+".tgz", tar); err != nil {
+	if _, err := s.tarballStorage.SaveTarball(name, version, tar); err != nil {
 		return err
 	}
 

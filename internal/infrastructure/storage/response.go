@@ -12,7 +12,9 @@ type AddPackumentVersionRes struct{}
 
 type AddPackumentTagRes struct{}
 
-type SaveTarballRes struct{}
+type SaveTarballRes struct{
+	Id string
+}
 
 type GetTarballRes struct {
 	Content []byte

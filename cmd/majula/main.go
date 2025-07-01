@@ -1,8 +1,10 @@
 package main
 
 import (
+	"log"
 	"log/slog"
 	"majula/internal/core"
+	"majula/internal/infrastructure/storage/filesystem"
 	"majula/internal/infrastructure/storage/inmem"
 	web "majula/internal/interface/http"
 	"os"
@@ -11,18 +13,28 @@ import (
 )
 
 func main() {
+	l := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+
 	port := os.Getenv("MAJULA_PORT")
+	fsStoragePath := os.Getenv("MAJULA_FS_STORAGE_PATH")
 
 	if port == "" {
 		port = "8000"
 	}
 
-	l := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelInfo,
-	}))
+	if fsStoragePath == "" {
+		log.Fatal("fs storage path not specified")
+	}
 
 	ps := inmem.NewPackumentStorage()
-	ts := inmem.NewTarballStorage()
+	ts, err := filesystem.NewTarballStorage(l, fsStoragePath)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	s := core.NewService(ps, ts)
 	srv := web.NewServer(s, l)
 
