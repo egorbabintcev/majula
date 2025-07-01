@@ -32,7 +32,7 @@ func NewServer(s Service, l *slog.Logger) *Server {
 }
 
 func (s *Server) Start(addr string) error {
-	s.logger.Info(fmt.Sprintf("Starting majula server at %s", addr))
+	s.logger.Info(fmt.Sprintf("Starting http server at %s", addr))
 
 	r := chi.NewRouter()
 	h := newHandler(s.service)
@@ -56,16 +56,16 @@ func (s *Server) Start(addr string) error {
 }
 
 func (s *Server) Stop() {
-	s.logger.Info("Gracefully shutting down majula server")
+	s.logger.Info("Gracefully shutting down http server")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	if err := s.server.Shutdown(ctx); err != nil {
-		s.logger.Error(fmt.Sprintf("Error shutting down majula server: %s", err))
+		s.logger.Error(fmt.Sprintf("Error gracefully shutting down http server: %s", err))
 	}
 
 	if err := s.server.Close(); err != nil {
-		s.logger.Error(fmt.Sprintf("Error forcibly shutting down majula server: %s", err))
+		s.logger.Error(fmt.Sprintf("Error forcibly shutting down http server: %s", err))
 	}
 }
