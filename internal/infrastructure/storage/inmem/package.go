@@ -7,9 +7,9 @@ import (
 )
 
 var (
-	ErrPackumentNotFound   = errors.New("failed to find package")
-	ErrAddPackumentVersion = errors.New("failed to save version manifest")
-	ErrAddPackumentTag     = errors.New("failed to save version tag")
+	ErrPackageNotFound   = errors.New("failed to find package")
+	ErrAddPackageVersion = errors.New("failed to save version manifest")
+	ErrAddPackageTag     = errors.New("failed to save version tag")
 )
 
 type storageEntry struct {
@@ -17,23 +17,23 @@ type storageEntry struct {
 	tags     map[string]string
 }
 
-type PackumentStorage struct {
+type PackageStorage struct {
 	packages map[string]storageEntry
 }
 
-func NewPackumentStorage() *PackumentStorage {
-	return &PackumentStorage{
+func NewPackageStorage() *PackageStorage {
+	return &PackageStorage{
 		packages: map[string]storageEntry{},
 	}
 }
 
-func (s *PackumentStorage) GetPackument(name string) (storage.GetPackumentRes, error) {
+func (s *PackageStorage) GetPackage(name string) (storage.GetPackageRes, error) {
 	if _, exist := s.packages[name]; !exist {
-		return storage.GetPackumentRes{}, ErrPackumentNotFound
+		return storage.GetPackageRes{}, ErrPackageNotFound
 	}
 
 	p := s.packages[name]
-	res := storage.GetPackumentRes{
+	res := storage.GetPackageRes{
 		Name:     name,
 		Versions: p.versions,
 		Tags:     p.tags,
@@ -42,7 +42,7 @@ func (s *PackumentStorage) GetPackument(name string) (storage.GetPackumentRes, e
 	return res, nil
 }
 
-func (s *PackumentStorage) AddPackumentVersion(name, version string, manifest json.RawMessage) (storage.AddPackumentVersionRes, error) {
+func (s *PackageStorage) AddPackageVersion(name, version string, manifest json.RawMessage) (storage.AddPackageVersionRes, error) {
 	if _, exist := s.packages[name]; !exist {
 		s.packages[name] = storageEntry{
 			versions: map[string]json.RawMessage{},
@@ -51,15 +51,15 @@ func (s *PackumentStorage) AddPackumentVersion(name, version string, manifest js
 	}
 
 	if _, exist := s.packages[name].versions[version]; exist {
-		return storage.AddPackumentVersionRes{}, ErrAddPackumentVersion
+		return storage.AddPackageVersionRes{}, ErrAddPackageVersion
 	}
 
 	s.packages[name].versions[version] = manifest
 
-	return storage.AddPackumentVersionRes{}, nil
+	return storage.AddPackageVersionRes{}, nil
 }
 
-func (s *PackumentStorage) AddPackumentTag(name, version, tag string) (storage.AddPackumentTagRes, error) {
+func (s *PackageStorage) AddPackageTag(name, version, tag string) (storage.AddPackageTagRes, error) {
 	if _, exist := s.packages[name]; !exist {
 		s.packages[name] = storageEntry{
 			versions: map[string]json.RawMessage{},
@@ -69,5 +69,5 @@ func (s *PackumentStorage) AddPackumentTag(name, version, tag string) (storage.A
 
 	s.packages[name].tags[tag] = version
 
-	return storage.AddPackumentTagRes{}, nil
+	return storage.AddPackageTagRes{}, nil
 }

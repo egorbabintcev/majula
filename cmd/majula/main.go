@@ -28,7 +28,7 @@ func main() {
 		log.Fatal("fs storage path not specified")
 	}
 
-	ps := inmem.NewPackumentStorage()
+	ps := inmem.NewPackageStorage()
 	ts, err := filesystem.NewTarballStorage(l, fsStoragePath)
 
 	if err != nil {

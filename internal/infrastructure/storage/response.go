@@ -2,15 +2,15 @@ package storage
 
 import "encoding/json"
 
-type GetPackumentRes struct {
+type GetPackageRes struct {
 	Name     string
 	Versions map[string]json.RawMessage
 	Tags     map[string]string
 }
 
-type AddPackumentVersionRes struct{}
+type AddPackageVersionRes struct{}
 
-type AddPackumentTagRes struct{}
+type AddPackageTagRes struct{}
 
 type SaveTarballRes struct{
 	Id string

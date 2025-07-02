@@ -13,7 +13,7 @@ import (
 )
 
 type Service interface {
-	GetPkg(name string) (core.GetPackumentRes, error)
+	GetPackage(name string) (core.GetPackageRes, error)
 	GetTarball(id string) (core.GetTarballRes, error)
 	PublishPkg(name, version string, tags []string, manifest json.RawMessage, tar []byte) error
 }
@@ -41,8 +41,8 @@ func (s *Server) Start(addr string) error {
 	r.Use(recoverer(s.logger))
 
 	r.Get("/-/whoami", h.handleGetWhoAmI)
-	r.Get("/{package}", h.handleGetPkg)
-	r.Put("/{package}", h.handlePutPkg)
+	r.Get("/{package}", h.handleGetPackage)
+	r.Put("/{package}", h.handlePutPackage)
 	r.Get("/{package}/-/{tarball}", h.handleGetTarball)
 
 	srv := &http.Server{

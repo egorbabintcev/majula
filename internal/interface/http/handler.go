@@ -31,10 +31,10 @@ func (h *handler) handleGetWhoAmI(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
-func (h *handler) handleGetPkg(w http.ResponseWriter, r *http.Request) {
+func (h *handler) handleGetPackage(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "package")
 
-	p, err := h.service.GetPkg(name)
+	p, err := h.service.GetPackage(name)
 
 	if err != nil {
 		respondWErr(w, http.StatusNotFound)
@@ -53,7 +53,7 @@ func (h *handler) handleGetPkg(w http.ResponseWriter, r *http.Request) {
 	w.Write(res)
 }
 
-func (h *handler) handlePutPkg(w http.ResponseWriter, r *http.Request) {
+func (h *handler) handlePutPackage(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 
 	if err != nil {

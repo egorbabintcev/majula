@@ -5,10 +5,10 @@ import (
 	"majula/internal/infrastructure/storage"
 )
 
-type PackumentStorage interface {
-	GetPackument(name string) (storage.GetPackumentRes, error)
-	AddPackumentVersion(name, version string, manifest json.RawMessage) (storage.AddPackumentVersionRes, error)
-	AddPackumentTag(name, version, tag string) (storage.AddPackumentTagRes, error)
+type PackageStorage interface {
+	GetPackage(name string) (storage.GetPackageRes, error)
+	AddPackageVersion(name, version string, manifest json.RawMessage) (storage.AddPackageVersionRes, error)
+	AddPackageTag(name, version, tag string) (storage.AddPackageTagRes, error)
 }
 
 type TarballStorage interface {
@@ -17,25 +17,25 @@ type TarballStorage interface {
 }
 
 type Service struct {
-	packumentStorage PackumentStorage
-	tarballStorage   TarballStorage
+	packageStorage PackageStorage
+	tarballStorage TarballStorage
 }
 
-func NewService(ps PackumentStorage, ts TarballStorage) *Service {
+func NewService(ps PackageStorage, ts TarballStorage) *Service {
 	return &Service{
-		packumentStorage: ps,
-		tarballStorage:   ts,
+		packageStorage: ps,
+		tarballStorage: ts,
 	}
 }
 
-func (s *Service) GetPkg(name string) (GetPackumentRes, error) {
-	p, err := s.packumentStorage.GetPackument(name)
+func (s *Service) GetPackage(name string) (GetPackageRes, error) {
+	p, err := s.packageStorage.GetPackage(name)
 
 	if err != nil {
-		return GetPackumentRes{}, err
+		return GetPackageRes{}, err
 	}
 
-	r := GetPackumentRes{
+	r := GetPackageRes{
 		Name:     p.Name,
 		Versions: p.Versions,
 		Tags:     p.Tags,
@@ -57,12 +57,12 @@ func (s *Service) GetTarball(id string) (GetTarballRes, error) {
 }
 
 func (s *Service) PublishPkg(name, version string, tags []string, manifest json.RawMessage, tar []byte) error {
-	if _, err := s.packumentStorage.AddPackumentVersion(name, version, manifest); err != nil {
+	if _, err := s.packageStorage.AddPackageVersion(name, version, manifest); err != nil {
 		return err
 	}
 
 	for _, t := range tags {
-		if _, err := s.packumentStorage.AddPackumentTag(name, version, t); err != nil {
+		if _, err := s.packageStorage.AddPackageTag(name, version, t); err != nil {
 			return err
 		}
 	}
