@@ -14,8 +14,8 @@ import (
 
 type Service interface {
 	GetPackage(name string) (core.GetPackageRes, error)
-	GetTarball(id string) (core.GetTarballRes, error)
 	PublishPkg(name, version string, tags []string, manifest json.RawMessage, tar []byte) error
+	GetTarball(id string) (core.GetTarballResponse, error)
 }
 
 type Server struct {

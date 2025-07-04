@@ -3,6 +3,7 @@ package core
 import (
 	"encoding/json"
 	"majula/internal/infrastructure/storage"
+	"majula/internal/infrastructure/tarball"
 )
 
 type PackageStorage interface {
@@ -12,8 +13,8 @@ type PackageStorage interface {
 }
 
 type TarballStorage interface {
-	SaveTarball(name, version string, tar []byte) (storage.SaveTarballRes, error)
-	GetTarball(id string) (storage.GetTarballRes, error)
+	Save(name, version string, content []byte) (tarball.SaveResponse, error)
+	Get(id string) (tarball.GetResponse, error)
 }
 
 type Service struct {
@@ -44,15 +45,15 @@ func (s *Service) GetPackage(name string) (GetPackageRes, error) {
 	return r, nil
 }
 
-func (s *Service) GetTarball(id string) (GetTarballRes, error) {
-	r, err := s.tarballStorage.GetTarball(id)
+func (s *Service) GetTarball(id string) (GetTarballResponse, error) {
+	r, err := s.tarballStorage.Get(id)
 
 	if err != nil {
-		return GetTarballRes{}, err
+		return GetTarballResponse{}, err
 	}
 
-	return GetTarballRes{
-		Content: r.Content,
+	return GetTarballResponse{
+		Tarball: r.Tarball,
 	}, nil
 }
 
@@ -67,7 +68,7 @@ func (s *Service) PublishPkg(name, version string, tags []string, manifest json.
 		}
 	}
 
-	if _, err := s.tarballStorage.SaveTarball(name, version, tar); err != nil {
+	if _, err := s.tarballStorage.Save(name, version, tar); err != nil {
 		return err
 	}
 

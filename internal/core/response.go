@@ -8,6 +8,6 @@ type GetPackageRes struct {
 	Tags     map[string]string
 }
 
-type GetTarballRes struct {
-	Content []byte
+type GetTarballResponse struct {
+	Tarball []byte
 }

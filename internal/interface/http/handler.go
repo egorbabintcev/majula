@@ -148,5 +148,5 @@ func (h *handler) handleGetTarball(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.WriteHeader(http.StatusOK)
-	w.Write(res.Content)
+	w.Write(res.Tarball)
 }
